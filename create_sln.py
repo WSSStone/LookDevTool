@@ -1,6 +1,6 @@
 import os, sys
 from utils.path_helper import handle_spaced_dir
-from utils.cmds_library import fabric_generate_sln_cmd
+from utils.cmds_library import cmd_fab
 
 FILE_CNT = 5
 UNREAL_BUILD_TOOL = "E:/UE_5.4.1/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
@@ -59,7 +59,7 @@ def main(argv):
     os.chdir(work_dir)
 
     proj_absname = f'{os.path.join(work_dir, proj_name)}.uproject'
-    cmd = fabric_generate_sln_cmd(proj_absname)
+    cmd = cmd_fab.fabric_generate_sln_cmd(proj_absname)
     print(cmd)
     print(os.system(cmd))
 

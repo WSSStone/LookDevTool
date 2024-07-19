@@ -1,5 +1,5 @@
 import os
-from utils.cmds_library import fabric_unzip_cmd
+from utils.cmds_library import cmd_fab
 
 WORK_DIR = "E:/Work/ExternalAssets/20240719/"
 EXTENSIONS = ["zip", "7z", "rar"]
@@ -44,7 +44,7 @@ def main():
         print(abspath)
         abspath = rename_to_ascii(abspath)
         print(abspath)
-        cmd = fabric_unzip_cmd(abspath, get_native_name(abspath))
+        cmd = cmd_fab.fabric_unzip_cmd(abspath, get_native_name(abspath))
         print(cmd)
         
         os.chdir(WORK_DIR)
