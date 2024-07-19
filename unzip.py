@@ -1,8 +1,7 @@
 import os
-import shutil
+from utils.cmds_library import fabric_unzip_cmd
 
 WORK_DIR = "E:/Work/ExternalAssets/20240719/"
-PROGRAMME = 'D:/"Program Files"/WinRAR/WinRAR.exe'
 EXTENSIONS = ["zip", "7z", "rar"]
 
 def get_extension(path:str) -> str:
@@ -28,10 +27,6 @@ def rename_to_ascii(abspath:str) -> str:
         os.rename(abspath, newname)
     return newname
 
-
-def fabric_cmd(path:str) -> str:
-    return f'{PROGRAMME} x "{path}" "{get_native_name(path)}/"'
-
 def main():
     li = os.listdir(WORK_DIR)
     for p in li:
@@ -49,7 +44,7 @@ def main():
         print(abspath)
         abspath = rename_to_ascii(abspath)
         print(abspath)
-        cmd = fabric_cmd(abspath)
+        cmd = fabric_unzip_cmd(abspath, get_native_name(abspath))
         print(cmd)
         
         os.chdir(WORK_DIR)

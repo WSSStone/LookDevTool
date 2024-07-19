@@ -1,16 +1,9 @@
 import os, sys
+from utils.path_helper import handle_spaced_dir
+from utils.cmds_library import fabric_generate_sln_cmd
 
 FILE_CNT = 5
 UNREAL_BUILD_TOOL = "E:/UE_5.4.1/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
-
-def handle_dir(argv:list) -> str:
-    res = ''
-    n = len(argv)
-    for i in range(1, n):
-        res += argv[i]
-        if i != n - 1:
-            res += ' '
-    return f'{res}'
 
 def copy_content(src:str, dst:str, module_name:str) -> None:
     content = ""
@@ -35,7 +28,7 @@ def main(argv):
         print("Empty Input")
         return
     
-    work_dir = handle_dir(argv)
+    work_dir = handle_spaced_dir(argv)
     template_dir = "E:/Work/ExternalAssets/scripts/template/"
     os.chdir(work_dir)
 
@@ -66,7 +59,7 @@ def main(argv):
     os.chdir(work_dir)
 
     proj_absname = f'{os.path.join(work_dir, proj_name)}.uproject'
-    cmd = f'{UNREAL_BUILD_TOOL} -ProjectFiles -project="{proj_absname}" -game -engine'
+    cmd = fabric_generate_sln_cmd(proj_absname)
     print(cmd)
     print(os.system(cmd))
 
