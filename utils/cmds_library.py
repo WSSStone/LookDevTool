@@ -13,9 +13,7 @@ class cmd_fab:
         return f'{UNREAL_BUILD_TOOL} -ProjectFiles -project="{proj_absname}" -game -engine'
 
     @classmethod
-    def fabric_softlink_cmd(cls, target_content:str, current_dir:str, targetdirname: str) -> str:
-        return cls.fabric_softlink_cmd(target_content, current_dir, targetdirname, targetdirname)
-
-    @classmethod
-    def fabric_softlink_cmd(cls, target_content:str, current_dir:str, targetdirname: str, dirname:str) -> str:
+    def fabric_softlink_cmd(cls, target_content:str, current_dir:str, targetdirname: str, dirname:str=None) -> str:
+        if dirname is None:
+            dirname = targetdirname
         return f'mklink /J "{os.path.join(target_content, targetdirname)}" "{os.path.join(current_dir, dirname)}"'
