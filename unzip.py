@@ -1,7 +1,7 @@
-import os
+import os, sys
+from utils.path_helper import handle_spaced_dir
 from utils.cmds_library import cmd_fab
 
-WORK_DIR = "E:/Work/ExternalAssets/20240719/"
 EXTENSIONS = ["zip", "7z", "rar"]
 
 def get_extension(path:str) -> str:
@@ -27,10 +27,16 @@ def rename_to_ascii(abspath:str) -> str:
         os.rename(abspath, newname)
     return newname
 
-def main():
-    li = os.listdir(WORK_DIR)
+def main(argv):
+    if len(argv) < 2:
+        print("Empty Input")
+        return
+    
+    work_dir = handle_spaced_dir(argv)
+
+    li = os.listdir(work_dir)
     for p in li:
-        abspath = os.path.join(WORK_DIR, p)
+        abspath = os.path.join(work_dir, p)
 
         if not os.path.exists(abspath):
             continue
@@ -47,8 +53,8 @@ def main():
         cmd = cmd_fab.fabric_unzip_cmd(abspath, get_native_name(abspath))
         print(cmd)
         
-        os.chdir(WORK_DIR)
+        os.chdir(work_dir)
         print(os.system(cmd))
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
