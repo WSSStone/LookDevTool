@@ -29,7 +29,7 @@ def main(argv):
         return
     
     work_dir = handle_spaced_dir(argv)
-    template_dir = "E:/Work/ExternalAssets/scripts/template/"
+    template_dir = "E:/Work/ExternalAssets/scripts/template/ProjectModuleTemplate/"
     os.chdir(work_dir)
 
     proj_name = None
