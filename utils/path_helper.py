@@ -11,9 +11,10 @@ def handle_spaced_dir(argv:list) -> str:
 
 class path_node:
     def __init__(self, path:str, prt=None) -> None:
-        self.path = path
+        self.abspath = path
+        self.relpath = os.path.basename(path)
         self.parent = prt
-        self.isfile = os.path.isfile(self.path)
+        self.isfile = os.path.isfile(self.abspath)
         self.children = []
 
     def add_child(self, child) -> None:
@@ -24,14 +25,44 @@ class path_node:
         ch = path_node(child_path)
         self.add_child(ch)
         return ch
+    
+    def udpate_path(self):
+        if not self.parent is None:
+            self.abspath = os.path.join(self.parent.abspath, self.relpath)
+            print(self.abspath)
+
+    def rename(self, newname):
+        self.udpate_path()
+
+        basename, extension = os.path.splitext(self.abspath)
+
+        extension = self.relpath.replace(extension, '')
+        
+        new_abspath = os.path.join(
+            os.path.dirname(self.abspath),
+            self.relpath.replace(extension, newname))
+
+        os.rename(
+            self.abspath,
+            new_abspath)
+        
+        self.abspath = new_abspath
+        self.relpath = self.relpath.replace(extension, newname)
 
 class path_tree:
-    def __init__(self, root_path:str) -> None:
+    def __init__(self, root_path:str, is_virtual:bool=False) -> None:
         self.root = path_node(root_path)
-        self._recur_iter(self.root)
+
+        if not self.root.isfile:
+            self._recur_iter(self.root)
+
+        self.is_virtual = is_virtual
 
     def _recur_iter(self, node:path_node) -> None:
-        _dir = node.path
+        _dir = node.abspath
+
+        curdir = os.curdir
+
         li = os.listdir(_dir)
         for p in li:
             _path = os.path.join(_dir, p)
@@ -40,6 +71,13 @@ class path_tree:
                self._recur_iter(_node)
 
     def node_task(self, node:path_node, func) -> None:
+        '''
+        <b>Recursively</b> do specific task through tree or subtree.
+
+            node: from which node to recur. self.root is recommended.
+        
+            func: task itself.
+        '''
         func(node)
         for ch in node.children:
             if ch.isfile:
@@ -47,12 +85,17 @@ class path_tree:
             else:
                 self.node_task(ch, func)
 
+    def copy_virtual(self, target_root:str):
+        virtual_tree = path_tree(target_root)
+
+        return virtual_tree
+
 if __name__ == '__main__':
     template_dir = "E:/Work/ExternalAssets/scripts/template/PluginTemplate/Plugin"
     
     ptree = path_tree(template_dir)
 
     def print_node(node) -> None:
-        print(node.path)
+        print(node.path, node.get_abs_path())
 
     ptree.node_task(ptree.root, print_node)
