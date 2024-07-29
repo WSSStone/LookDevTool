@@ -3,9 +3,9 @@
 using UnrealBuildTool;
 using System.IO; // for Path
 
-public class Module : ModuleRules
+public class PLUGIN : ModuleRules
 {
-	public Module(ReadOnlyTargetRules Target) : base(Target)
+	public PLUGIN(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
