@@ -7,7 +7,7 @@ def main(argv:list):
         print("Invalid Input")
         return
     
-    template_dir = "E:/Work/ExternalAssets/scripts/template/PluginTemplate/"
+    template_dir = os.path.realpath("./template/PluginTemplate/")
     PLUGIN_NAME = argv[2]
     argv.pop()
     work_dir = handle_spaced_dir(argv)
