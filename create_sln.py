@@ -3,7 +3,7 @@ from utils.path_helper import handle_spaced_dir
 from utils.cmds_library import cmd_fab
 
 FILE_CNT = 5
-UNREAL_BUILD_TOOL = "E:/UE_5.4.1/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
+UNREAL_BUILD_TOOL = "E:/UE_5.4/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
 
 def copy_content(src:str, dst:str, module_name:str) -> None:
     content = ""
