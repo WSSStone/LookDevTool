@@ -1,6 +1,6 @@
 import os
 
-UNREAL_BUILD_TOOL = "E:/UE_5.4.1/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
+UNREAL_BUILD_TOOL = "E:/UE_5.4/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
 WINRAR = 'D:/"Program Files"/WinRAR/WinRAR.exe'
 
 class cmd_fab:
