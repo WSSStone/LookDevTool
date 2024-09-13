@@ -1,4 +1,4 @@
-import os
+import os, sys
 
 def handle_spaced_dir(argv:list) -> str:
     res = ''
@@ -78,12 +78,22 @@ class path_tree:
         
             func: task itself.
         '''
-        func(node)
+
+        # first recur then task
+        for ch in [ch for ch in node.children if not ch.isfile]:
+            self.node_task(ch, func)
+
+        for ch in [ch for ch in node.children if ch.isfile]:
+            func(ch)
+
+        '''
         for ch in node.children:
             if ch.isfile:
                 func(ch)
             else:
                 self.node_task(ch, func)
+        '''
+        func(node)
 
     def copy_virtual(self, target_root:str):
         virtual_tree = path_tree(target_root)
@@ -91,11 +101,15 @@ class path_tree:
         return virtual_tree
 
 if __name__ == '__main__':
-    template_dir = "E:/Work/ExternalAssets/scripts/template/PluginTemplate/Plugin"
+    if len(sys.argv) < 2:
+        print('Empty Input')
+        quit()
     
-    ptree = path_tree(template_dir)
+    work_dir = handle_spaced_dir(sys.argv)
+    
+    ptree = path_tree(work_dir)
 
     def print_node(node) -> None:
-        print(node.path, node.get_abs_path())
+        print(node.abspath, '|' * 5, node.relpath)
 
     ptree.node_task(ptree.root, print_node)
