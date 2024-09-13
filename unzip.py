@@ -53,33 +53,7 @@ def unzip_recur(work_dir:str, cur_dir:str) -> None:
         
         if os.system(cmd) is 0:
             print(f'{abspath} successfully unzipped. Now removing zip file.')
-
-            def _error_log(func, path, excinfo):
-                """
-                Function that track and record the errors when removing files/dirs
-
-                Args:
-                    func (function): The function that raised the error.
-                    path (string): Path to the file/dir that raised the error.
-                    excinfo (tuple): The exception information returned by sys.exc_info().
-                """
-
-                # Log dict -> key= file/dir fullpath: value= [error class, error message, function that raised the error] 
-                log = {}
-                # Set the file/dir full path as key with an empty list as value
-                log.setdefault(path, [])
-
-                # Append the error class and message raised from excinfo tuple
-                log[path].append(excinfo[0].__name__)
-                log[path].append(excinfo[1].strerror)
-
-                # Append the function that raised the error
-                log[path].append(func.__name__)
-
-                return log
-            
-            import shutil
-            shutil.rmtree(abspath, onerror=_error_log)
+            os.remove(abspath)
 
     os.chdir(cur_dir)
 
