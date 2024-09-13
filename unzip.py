@@ -27,12 +27,8 @@ def rename_to_ascii(abspath:str) -> str:
         os.rename(abspath, newname)
     return newname
 
-def main(argv):
-    if len(argv) < 2:
-        print("Empty Input")
-        return
-    
-    work_dir = handle_spaced_dir(argv)
+def unzip_recur(work_dir:str, cur_dir:str) -> None:
+    os.chdir(work_dir)
 
     li = os.listdir(work_dir)
     for p in li:
@@ -42,7 +38,7 @@ def main(argv):
             continue
 
         if not os.path.isfile(abspath):
-            continue
+            unzip_recur(abspath, work_dir)
 
         if get_extension(p) not in EXTENSIONS:
             continue
@@ -55,6 +51,17 @@ def main(argv):
         
         os.chdir(work_dir)
         print(os.system(cmd))
+
+    os.chdir(cur_dir)
+
+def main(argv):
+    if len(argv) < 2:
+        print("Empty Input")
+        return
+    
+    work_dir = handle_spaced_dir(argv)
+    
+    unzip_recur(work_dir, work_dir)
 
 if __name__ == '__main__':
     main(sys.argv)
