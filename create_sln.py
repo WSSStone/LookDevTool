@@ -1,6 +1,7 @@
 import os, sys
 from utils.path_helper import handle_spaced_dir
 from utils.cmds_library import cmd_fab
+from generate_sln import generate_sln
 
 FILE_CNT = 5
 
@@ -58,9 +59,8 @@ def main(argv):
     os.chdir(work_dir)
 
     proj_absname = f'{os.path.join(work_dir, proj_name)}.uproject'
-    cmd = cmd_fab.fabric_generate_sln_cmd(proj_absname)
-    print(cmd)
-    print(os.system(cmd))
+    
+    generate_sln(proj_absname)
 
 if __name__ == '__main__':
     main(sys.argv)
