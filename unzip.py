@@ -19,6 +19,9 @@ def get_native_name(path:str) -> str:
     return path
 
 def rename_to_ascii(abspath:str) -> str:
+    '''
+    rename file by removing any character outside ascii, and return the new file name
+    '''
     newname = ''
     for char in abspath:
         if char.isascii():
@@ -51,7 +54,7 @@ def unzip_recur(work_dir:str, cur_dir:str) -> None:
         
         os.chdir(work_dir)
         
-        if os.system(cmd) is 0:
+        if os.system(cmd) == 0:
             print(f'{abspath} successfully unzipped. Now removing zip file.')
             os.remove(abspath)
 
