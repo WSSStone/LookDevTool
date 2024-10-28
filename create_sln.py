@@ -5,7 +5,7 @@ from generate_sln import generate_sln
 
 FILE_CNT = 5
 
-def copy_content(src:str, dst:str, module_name:str) -> None:
+def copy_content(src:str, dst:str, module_name:str, version) -> None:
     content = ""
     
     with open(src, "r+") as srcf:
@@ -14,6 +14,15 @@ def copy_content(src:str, dst:str, module_name:str) -> None:
 
     for i in range(len(content)):
         content[i] = content[i].replace("Template", module_name)
+        
+        if version == "5.4" or ".Target.cs" not in src:
+            continue
+        
+        if "EngineIncludeOrderVersion.Unreal5_4" in content[i]:
+            content[i] = content[i].replace("EngineIncludeOrderVersion.Unreal5_4", "EngineIncludeOrderVersion.Unreal5_3")
+        
+        if "BuildSettingsVersion.V5" in content[i]:
+            content[i] = content[i].replace("BuildSettingsVersion.V5", "BuildSettingsVersion.V4")
 
     with open(dst, "w+") as dstf:
         dstf.writelines(content)
@@ -24,12 +33,20 @@ def get_names(inp:str) -> list:
             f"{inp}/{inp}.h", f"{inp}/{inp}.cpp", f"{inp}/{inp}.build.cs"]
 
 def main(argv):
-    if len(argv) < 2:
-        print("Empty Input")
+    if len(argv) < 3:
+        print("Illegal Input")
         return
     
-    work_dir = handle_spaced_dir(argv)
+    if argv[-1] != "5.3" and argv[-1] != "5.4":
+        print("[create_sln] wrong version input: use '5.3' or '5.4'!")
+        return
+    
+    version = argv[-1]
+    arg_list = argv[0:-1]
+    print('-'*50, arg_list)
+    work_dir = handle_spaced_dir(arg_list)
     template_dir = os.path.realpath("./template/ProjectModuleTemplate/")
+    print(work_dir)
     os.chdir(work_dir)
 
     proj_name = None
@@ -54,13 +71,13 @@ def main(argv):
     module_files = get_names(proj_name)
 
     for i in range(0, FILE_CNT):
-        copy_content(template_files[i], module_files[i], proj_name)
+        copy_content(template_files[i], module_files[i], proj_name, version)
 
     os.chdir(work_dir)
 
     proj_absname = f'{os.path.join(work_dir, proj_name)}.uproject'
     
-    generate_sln(proj_absname)
+    generate_sln(proj_absname, version)
 
 if __name__ == '__main__':
     main(sys.argv)
