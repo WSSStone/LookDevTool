@@ -31,7 +31,12 @@ def main(argv):
     
     work_dir = handle_spaced_dir(argv)
 
-    remove_files(work_dir, rm_ext=['.uasset', '.umap'])
+    remove_uasset = False
+    
+    if remove_uasset:
+        remove_files(work_dir, rm_ext=['.uasset', '.umap'])
+    else:
+        remove_files(work_dir, rm_ext=['.fbx', '.png', '.tga', '.TGA', '.jpg', '.FBX', '.wav', '.WAV'])
 
 if __name__ == '__main__':
     main(sys.argv)
