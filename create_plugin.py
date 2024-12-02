@@ -14,11 +14,11 @@ def main(argv:list):
 
     os.chdir(work_dir)
 
-    target_dir = os.path.join(work_dir, "Plugin")
+    target_dir = os.path.join(work_dir, "Plugins")
     if not os.path.exists(target_dir):
         shutil.copytree(
-            os.path.join(template_dir, "Plugin"),
-            os.path.join(work_dir, "Plugin"))
+            os.path.join(template_dir, "Plugins"),
+            os.path.join(work_dir, "Plugins"))
 
     ptree = path_tree(target_dir)
 
