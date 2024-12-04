@@ -1,4 +1,4 @@
-import os, sys, subprocess, time
+import os, sys, subprocess, time, logging
 from utils.path_helper import handle_spaced_dir
 
 def svn_update_with_timeout(work_dir:str, timeout:int=300) -> int:
@@ -9,14 +9,14 @@ def svn_update_with_timeout(work_dir:str, timeout:int=300) -> int:
     
     while should_run:
         if proc is None:
-            # reset status
+            logging.info(f"Running 'svn cleanup' in {work_dir}...")
             os.system("svn cleanup")
             
             start_time = time.time()
 
         try:
             if proc is None:
-                print(f"Starting 'svn update' in {work_dir}...")
+                logging.info(f"Running 'svn update' in {work_dir}...")
                 proc = subprocess.Popen(['svn', 'update', work_dir],
                                         bufsize=0,
                                         universal_newlines=True,
@@ -30,11 +30,11 @@ def svn_update_with_timeout(work_dir:str, timeout:int=300) -> int:
             output = proc.stdout.readline()
             if len(output) > 0:
                 start_time = time.time()
-                print(f"['svn update']: {output}")
+                logging.info(f"['svn update']: {output}")
                 output = None
             else:
                 if time.time() - start_time >= timeout:
-                    print(f"'svn update' timed out after {timeout} seconds. Retrying...")
+                    logging.warning(f"'svn update' timed out after {timeout} seconds. Retrying...")
                     proc.terminate()
                     proc = None
                     continue
@@ -43,9 +43,9 @@ def svn_update_with_timeout(work_dir:str, timeout:int=300) -> int:
             if proc.poll() is not None:
                 if proc.returncode == 0:
                     elapsed_time = time.time() - start_time
-                    print(f"'svn update' completed successfully in {elapsed_time:.2f} seconds.")
+                    logging.info(f"'svn update' completed successfully in {elapsed_time:.2f} seconds.")
                 else:
-                    print(f"'svn update' completed with error code {proc.returncode}.")
+                    logging.error(f"'svn update' completed with error code {proc.returncode}.")
                 proc.terminate()
                 proc.wait()
                 proc = None
@@ -53,10 +53,10 @@ def svn_update_with_timeout(work_dir:str, timeout:int=300) -> int:
                 break
 
         except subprocess.TimeoutExpired:
-            print(f"'svn update' timed out after {timeout} seconds. Retrying...")
+            logging.exception(f"'svn update' timed out after {timeout} seconds. Retrying...")
             
         except subprocess.CalledProcessError as e:
-            print(f"An error occurred during 'svn update': {e}")
+            logging.critical(f"An error occurred during 'svn update': {e}")
             
         except KeyboardInterrupt:
             proc.terminate()
@@ -68,6 +68,15 @@ def main(argv):
         return
     
     work_dir = handle_spaced_dir(argv)
+
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename=os.path.join(os.getcwd(), "logs/svn_update.log"),
+        encoding="utf-8",
+        filemode="a",
+        format="{asctime} - {levelname} - {message}",
+        style="{",
+        datefmt="%Y-%m-%d %H:%M:%S")
     
     svn_update_with_timeout(work_dir, timeout=10)
 
