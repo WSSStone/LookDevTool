@@ -68,10 +68,12 @@ def main(argv):
         return
     
     work_dir = handle_spaced_dir(argv)
+    basename = work_dir.split("\\")[-2 if work_dir.endswith("\\") else -1]
+    logname = f"logs/svn_update_{basename}.log"
 
     logging.basicConfig(
         level=logging.DEBUG,
-        filename=os.path.join(os.getcwd(), "logs/svn_update.log"),
+        filename=os.path.join(os.getcwd(), logname),
         encoding="utf-8",
         filemode="a",
         format="{asctime} - {levelname} - {message}",
