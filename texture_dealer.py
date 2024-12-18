@@ -1,5 +1,6 @@
 import os, sys
 import cv2
+from PIL import Image
 import numpy as np
 from console.utils import wait_key
 from utils.path_helper import handle_spaced_dir
@@ -39,6 +40,18 @@ def texture_concatenate(dir:str, rname:str, gname:str, bname:str) -> np.ndarray:
     
     return rgb
 
+def texture_keep_channel(dir:str, name:str, rname:str, channel:int) -> np.ndarray:
+    path = os.path.join(dir, name)
+    rpath = os.path.join(dir, rname)
+
+    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    single_channel = cv2.split(img)[channel]
+
+    pil_image = Image.fromarray(single_channel)
+    pil_image.save(rpath)
+
+    return single_channel
+
 def main(argv) -> None:
     if len(argv) < 3:
         print("Empty Input: operation, texture path, parameter")
@@ -52,6 +65,9 @@ def main(argv) -> None:
 
     if argv[1] == "exchange":
         texture_exchange_channel(argv[2])
+
+    if argv[1] == "single":
+        texture_keep_channel(argv[2], argv[3], argv[4], int(argv[5]))
 
 if __name__ == '__main__':
     main(sys.argv)
