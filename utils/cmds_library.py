@@ -1,8 +1,8 @@
 import os
 import enum
 
-UNREAL_BUILD_TOOL_53 = "E:/UE_5.3/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
-UNREAL_BUILD_TOOL_54 = "E:/UE_5.4/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
+UNREAL_BUILD_TOOL_53 = "D:/UE_5.3/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
+UNREAL_BUILD_TOOL_54 = "D:/UE_5.4/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe"
 WINRAR = 'D:/"Program Files"/WinRAR/WinRAR.exe'
 
 class cmd_fab:
