@@ -34,7 +34,7 @@ def get_names(inp:str) -> list:
 
 def main(argv):
     if len(argv) < 3:
-        print("Illegal Input")
+        print("Illegal Input: <ProjectDir> <Version>")
         return
     
     if argv[-1] != "5.3" and argv[-1] != "5.4":
